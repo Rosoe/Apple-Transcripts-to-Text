@@ -19,12 +19,6 @@ This tool solves these problems by:
 - Maintaining complete privacy through local-only processing
 - Offering full transparency with open-source code
 
-## Quick Start
-
-1. Download the [index.html](https://github.com/Rosoe/Apple-Transcripts-to-Text/blob/main/index.html) file
-2. Open it in your browser
-3. Follow the usage instructions below
-
 ## Features
 
 - 🔄 Convert TTML (Timed Text Markup Language) files to plain text
@@ -36,7 +30,7 @@ This tool solves these problems by:
 
 ## How to Use
 
-1. Download the HTML file and open it in your browser of choice.
+1. Download the [index.html](https://github.com/Rosoe/Apple-Transcripts-to-Text/blob/main/index.html) file and open it in your browser of choice.
 2. Open the episode in the MacOS Podcasts app and click 'Transcript' (or ··· > 'View Transcript')
 3. Access the transcript file:
    - Open Finder
