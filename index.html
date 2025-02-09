@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTML to Text Converter</title>
+    <style>
+        :root {
+            --purple-primary: #9F4CDE;
+            --purple-hover: #8A3BC7;
+            --background: #F5F5F7;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background: var(--background);
+            color: #1D1D1F;
+        }
+        
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.015em;
+        }
+
+        .header p {
+            font-size: 21px;
+            line-height: 1.5;
+            color: #484848;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        #textInput {
+            width: 100%;
+            min-height: 150px;
+            padding: 16px;
+            border: 1px solid #E5E5E5;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        #output {
+            white-space: pre-wrap;
+            background: var(--background);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #E5E5E5;
+            margin: 20px 0;
+            min-height: 100px;
+            font-size: 16px;
+        }
+
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        button {
+            background: var(--purple-primary);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 980px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        button:disabled {
+            background: #E5E5E5;
+            cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--purple-hover);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .github-section {
+            text-align: center;
+            margin-top: 60px;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+        }
+
+        .github-section h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .github-section a {
+            color: var(--purple-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .github-section a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background: var(--background);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            word-break: break-all;
+            font-size: 14px;
+        }
+
+        ol {
+            padding-left: 24px;
+        }
+
+        ol li {
+            margin-bottom: 16px;
+            color: #484848;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin: 32px 0 24px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Apple Podcast Transcript Converter</h1>
+            <p>Convert Apple TTML transcripts to easily readable text. Extract and copy podcast transcripts stored locally on your MacOS device.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>How to find your transcript:</h2>
+            <ol>
+                <li>Go to the episode in the MacOS Podcasts app and click where it says 'Transcript' (or the triple dots ··· > 'View Transcript').</li>
+                <li>Open a Finder window and select 'Go' > 'Go to Folder' from the menu (or type Cmd+Shift+G) and enter the following:<br>
+                    <code>~/Library/Group Containers/243LU875E5.groups.com.apple.podcasts</code></li>
+                <li>Transcript assets are kept in a folder called TTML. Apple obfuscates them by placing them deep into a file structure. Keep drilling down until you find a transcript. Check it's the transcript you want by opening the .ttml file in a text file reader (eg. CotEditor)</li>
+                <li>Copy and paste the entire file contents into the text box below and let's do some magic.</li>
+            </ol>
+
+            <p><strong>Note:</strong> This tool processes everything locally in your browser. No data is sent to any server.</p>
+            
+            <div class="input-group">
+                <textarea id="textInput" placeholder="Paste your TTML content here. Large amounts of content will take time to paste so be patient..."></textarea>
+                <div class="button-group">
+                    <button id="convertTextBtn">Convert Text</button>
+                    <button id="downloadBtn" disabled>Download Text File</button>
+                </div>
+            </div>
+            
+            <div id="output"></div>
+        </div>
+
+        <div class="github-section">
+            <h2>Support & Contribute</h2>
+            <p>Find this tool useful? Check out more of my projects on GitHub!</p>
+            <p>
+                <a href="https://github.com/Rosoe" target="_blank">Visit My GitHub Profile</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let cleanText = '';
+        const textInput = document.getElementById('textInput');
+        const convertTextBtn = document.getElementById('convertTextBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const output = document.getElementById('output');
+
+        function processXMLContent(content) {
+            try {
+                // Add space before closing span tags
+                content = content.replace(/<\/span>/g, " </span>");
+                
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(content, "text/xml");
+                
+                // Check for parsing errors
+                const parserError = xmlDoc.getElementsByTagName('parsererror');
+                if (parserError.length > 0) {
+                    throw new Error('Invalid XML format. Please ensure this is a valid TTML file.');
+                }
+                
+                // Get all paragraphs
+                const paragraphs = xmlDoc.getElementsByTagName('p');
+                
+                // Extract text from TTML using span structure
+                if (paragraphs.length === 0) {
+                    throw new Error('No text content found. Please ensure this is a valid TTML file with <p> tags.');
+                }
+
+                // Track speakers and their names
+                let currentSpeaker = '';
+                const speakerNames = new Map();
+                let speakerCounter = 1;
+                
+                cleanText = Array.from(paragraphs)
+                    .map(p => {
+                        // Get speaker and timestamp information
+                        const speaker = p.getAttribute('ttm:agent');
+                        const begin = p.getAttribute('begin');
+                        let text = '';
+
+                        // Format timestamp (convert from HH:MM:SS.mmm to [MM:SS])
+                        let timestamp = '';
+                        if (begin) {
+                            const match = begin.match(/(?:(\d+):)?(\d+):(\d+)\.(\d+)/);
+                            if (match) {
+                                const [_, hours, minutes, seconds] = match;
+                                const totalMinutes = hours ? 
+                                    parseInt(hours) * 60 + parseInt(minutes) : 
+                                    parseInt(minutes);
+                                // Pad minutes and seconds with zeros
+                                const paddedMinutes = totalMinutes.toString().padStart(2, '0');
+                                const paddedSeconds = seconds.padStart(2, '0');
+                                timestamp = `[${paddedMinutes}:${paddedSeconds}] `;
+                            }
+                        }
+
+                        // Handle speaker tracking and labeling
+                        if (speaker && speaker !== currentSpeaker) {
+                            currentSpeaker = speaker;
+                            
+                            // Assign speaker names if not already assigned
+                            if (!speakerNames.has(speaker)) {
+                                speakerNames.set(speaker, `Speaker ${speakerCounter}`);
+                                speakerCounter++;
+                            }
+                            
+                            text = `\n${speakerNames.get(speaker)}:\n${timestamp}`;
+                        } else if (timestamp) {
+                            text = timestamp;
+                        }
+
+                        // Get sentence spans (direct children of p)
+                        const sentenceSpans = Array.from(p.children).filter(child => 
+                            child.tagName.toLowerCase() === 'span' && 
+                            child.getAttribute('unit') === 'sentence'
+                        );
+
+                        if (sentenceSpans.length === 0) {
+                            // If no sentence spans found, return the paragraph text
+                            return text + p.textContent.trim();
+                        }
+
+                        // Get all word spans from all sentences and join with spaces
+                        const wordSpans = Array.from(p.getElementsByTagName('span'))
+                            .filter(span => span.getAttribute('unit') === 'word')
+                            .map(span => span.textContent);
+                        return text + wordSpans.join('         ');
+                    })
+                    .filter(text => text) // Remove empty paragraphs
+                    .join('\n\n');
+
+                // Show preview
+                output.className = '';
+                output.textContent = cleanText;
+                downloadBtn.disabled = false;
+            } catch (error) {
+                output.className = 'error';
+                output.textContent = 'Error: ' + error.message;
+                downloadBtn.disabled = true;
+                cleanText = '';
+            }
+        }
+
+        // Text input handler
+        convertTextBtn.addEventListener('click', function() {
+            const content = textInput.value.trim();
+            if (!content) {
+                output.className = 'error';
+                output.textContent = 'Please paste some TTML content first.';
+                return;
+            }
+            
+            // Show loading state
+            convertTextBtn.disabled = true;
+            convertTextBtn.textContent = 'Converting...';
+            output.textContent = 'Processing...';
+            downloadBtn.disabled = true;
+            
+            // Use setTimeout to allow UI to update before processing
+            setTimeout(() => {
+                processXMLContent(content);
+                // Reset button state
+                convertTextBtn.disabled = false;
+                convertTextBtn.textContent = 'Convert Text';
+            }, 0);
+        });
+
+        downloadBtn.addEventListener('click', function() {
+            if (!cleanText) return;
+            
+            const blob = new Blob([cleanText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transcript.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
