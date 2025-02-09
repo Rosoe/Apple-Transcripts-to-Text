@@ -2,6 +2,29 @@
 
 Convert Apple Podcast TTML transcripts into clean, readable text with this browser-based tool. Extract and process podcast transcripts stored locally on your MacOS device with ease.
 
+## Why This Tool Exists
+
+As someone who regularly takes notes on podcasts using Zotero, I noticed a significant limitation in Apple's podcast transcript system. While Apple invests computational resources in generating high-quality transcripts using Language Learning Models (LLMs), they restrict users from copying more than 200 words at a time (as of current date). This limitation creates several issues:
+
+- Forces users to either manually copy small sections or reprocess entire episodes through speech-to-text LLMs
+- Creates unnecessary environmental impact by requiring redundant AI processing
+- Makes academic and research work unnecessarily cumbersome
+- Limits accessibility and practical use of already-generated transcripts
+
+This tool solves these problems by:
+
+- Providing free (as in freedom and cost) access to already-processed transcripts
+- Eliminating the need for redundant AI processing
+- Making transcript extraction accessible to non-technical users
+- Maintaining complete privacy through local-only processing
+- Offering full transparency with open-source code
+
+## Quick Start
+
+1. Download the [index.html](https://github.com/Rosoe/Apple-Transcripts-to-Text/blob/main/index.html) file
+2. Open it in your browser
+3. Follow the usage instructions below
+
 ## Features
 
 - 🔄 Convert TTML (Timed Text Markup Language) files to plain text
@@ -13,15 +36,16 @@ Convert Apple Podcast TTML transcripts into clean, readable text with this brows
 
 ## How to Use
 
-1. Open the episode in the MacOS Podcasts app and click 'Transcript' (or ··· > 'View Transcript')
-2. Access the transcript file:
+1. Download the HTML file and open it in your browser of choice.
+2. Open the episode in the MacOS Podcasts app and click 'Transcript' (or ··· > 'View Transcript')
+3. Access the transcript file:
    - Open Finder
    - Press `Cmd+Shift+G` or select 'Go' > 'Go to Folder'
    - Enter: `~/Library/Group Containers/243LU875E5.groups.com.apple.podcasts`
-3. Navigate through the TTML folder to find your transcript
-4. Copy the entire .ttml file contents
-5. Paste into the converter and click "Convert Text"
-6. Download or copy your formatted transcript
+4. Navigate through the TTML folder to find your transcript
+5. Copy the entire .ttml file contents
+6. Paste into the converter and click "Convert Text"
+7. Download or copy your formatted transcript
 
 ## Technical Details
 
