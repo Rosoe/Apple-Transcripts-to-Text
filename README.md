@@ -4,7 +4,7 @@ Convert Apple Podcast TTML transcripts into clean, readable text with this brows
 
 ## Why This Tool Exists
 
-As someone who regularly takes notes on podcasts using Zotero, I noticed a significant limitation in Apple's podcast transcript system. While Apple invests computational resources in generating high-quality transcripts using Language Learning Models (LLMs), they restrict users from copying more than 200 words at a time (as of current date). This limitation creates several issues:
+As someone who regularly takes notes on podcasts using Zotero, I noticed a significant limitation in Apple's podcast transcript system. While Apple invests computational resources in generating high-quality transcripts using Language Learning Models (LLMs), they restrict users from copying more than 200 words at a time (as of 12/02/2025). This limitation creates several issues:
 
 - Forces users to either manually copy small sections or reprocess entire episodes through speech-to-text LLMs
 - Creates unnecessary environmental impact by requiring redundant AI processing
